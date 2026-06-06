@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal de Administración Residencial</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- ==========================================
+         SIDEBAR NAVIGATION
+         ========================================== -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="logo-container" id="sidebar-logo-container">
+          <!-- Logo SVG por defecto o imagen cargada -->
+          <svg class="logo-img" viewBox="0 0 100 100" id="default-logo-svg">
+            <path d="M20,90 C20,90 30,10 55,10 C80,10 80,45 55,45 C45,45 40,55 40,65 L40,90" fill="none" stroke="#1e40af" stroke-width="12" stroke-linecap="round"/>
+            <path d="M40,50 C40,50 60,50 75,65 C85,75 80,90 80,90" fill="none" stroke="#059669" stroke-width="12" stroke-linecap="round"/>
+            <circle cx="55" cy="28" r="8" fill="#f59e0b"/>
+          </svg>
+        </div>
+        <div class="sidebar-brand-info">
+          <span class="sidebar-title" id="brand-name">Ráquira</span>
+          <span class="sidebar-subtitle">Administración</span>
+        </div>
+      </div>
+      
+      <ul class="sidebar-menu">
+        <li class="menu-item active" data-target="view-inicio">
+          <a class="menu-item-link">
+            <!-- Icono Inicio -->
+            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            Inicio
+          </a>
+        </li>
+        <li class="menu-item" data-target="view-pagos">
+          <a class="menu-item-link">
+            <!-- Icono Cuentas y Pagos -->
+            <svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+            Cuentas y Pagos
+          </a>
+        </li>
+        <li class="menu-item" data-target="view-reservas">
+          <a class="menu-item-link">
+            <!-- Icono Reservas -->
+            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            Reservas
+          </a>
+        </li>
+        <li class="menu-item" data-target="view-solicitudes">
+          <a class="menu-item-link">
+            <!-- Icono Solicitudes -->
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            Solicitudes Mudanza/Mat.
+          </a>
+        </li>
+        <li class="menu-item" data-target="view-avisos">
+          <a class="menu-item-link">
+            <!-- Icono Avisos -->
+            <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+            Avisos y Circulares
+          </a>
+        </li>
+        <li class="menu-item" data-target="view-informe">
+          <a class="menu-item-link">
+            <!-- Icono Informe (Chart/Trending Up) -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+            Informe de Gestión
+          </a>
+        </li>
+        <li class="menu-item" data-target="view-pqrs">
+          <a class="menu-item-link">
+            <!-- Icono PQRs -->
+            <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            PQRs
+          </a>
+        </li>
+        <li class="menu-item admin-only" data-target="view-config">
+          <a class="menu-item-link">
+            <!-- Icono Configuración -->
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            Configuración
+          </a>
+        </li>
+      </ul>
+      
+      <div class="sidebar-footer" style="flex-direction: column; align-items: stretch; gap: 12px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div class="avatar" id="admin-avatar">SI</div>
+          <div class="user-info" style="flex: 1;">
+            <span class="user-name" id="admin-name">Sandra Liliana Iquinas</span>
+            <span class="user-role">Administradora</span>
+          </div>
+        </div>
+        <!-- Botón de Control de Modo Admin -->
+        <button class="btn btn-outline" id="btn-admin-toggle" style="padding: 6px 12px; font-size: 11px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; background-color: rgba(255,255,255,0.05); color: #94a3b8; border-color: rgba(255,255,255,0.1); border-radius: 6px; cursor: pointer;" onclick="handleAdminToggle()">
+          <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" style="margin:0;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+          <span id="admin-toggle-text">Modo Residente</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- ==========================================
+         MAIN CONTENT AREA
+         ========================================== -->
+    <main class="main-content">
+      
+      <!-- HEADER -->
+      <header class="header">
+        <div class="menu-toggle" id="menu-toggle">
+          <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </div>
+        <div class="header-title-container">
+          <h1 id="page-title">Inicio</h1>
+          <p id="current-complex-subtitle">Conjunto Residencial Ráquira</p>
+        </div>
+        <div class="header-actions">
+          <div class="status-badge-db" id="db-status-badge" style="cursor: pointer;" onclick="showDbTroubleshoot()" title="Click para ver diagnóstico de conexión">
+            <span class="status-dot"></span>
+            <span id="db-status-text">Base de datos Local</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- ==========================================
+           SECCIÓN: INICIO / DASHBOARD
+           ========================================== -->
+      <section class="view-section active" id="view-inicio">
+        
+        <!-- Welcome banner -->
+        <div class="welcome-card">
+          <h2 id="dashboard-welcome-title">¡Bienvenido a Ráquira!</h2>
+          <p>Panel administrativo y de servicios residenciales para copropietarios e inquilinos.</p>
+          <div class="info-grid">
+            <div class="info-badge-card">
+              <span class="label">Administradora</span>
+              <span class="val" id="card-admin-name">Sandra Liliana Iquinas</span>
+            </div>
+            <div class="info-badge-card">
+              <span class="label">NIT</span>
+              <span class="val" id="card-nit">901.900.228</span>
+            </div>
+            <div class="info-badge-card">
+              <span class="label">Dirección</span>
+              <span class="val" id="card-direccion">Calle 7 # 20B - 63 — Yumbo</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Split area: Latest notices + Info -->
+        <div class="dashboard-split">
+          <!-- Latest Announcements -->
+          <div class="dashboard-card">
+            <div class="dashboard-card-header">
+              <h3 class="dashboard-card-title">Últimos Avisos y Circulares</h3>
+              <button class="btn btn-outline" onclick="navigateToTab('view-avisos')">Ver todos</button>
+            </div>
+            <div class="notices-grid" id="dashboard-notices-container" style="grid-template-columns: 1fr;">
+              <!-- Se cargan dinámicamente con JS -->
+              <p class="text-muted">No hay avisos recientes registrados.</p>
+            </div>
+          </div>
+
+          <!-- Contact / Admin Card -->
+          <div class="dashboard-card" style="display: flex; flex-direction: column; gap: 20px;">
+            <h3 class="dashboard-card-title">Datos de Contacto</h3>
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+              <div style="display: flex; gap: 12px; align-items: center;">
+                <div style="padding: 8px; background-color: #f1f5f9; border-radius: 50%; color: var(--color-primary-light);">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                </div>
+                <div>
+                  <div style="font-size: 12px; color: var(--text-muted);">Teléfono de Oficina</div>
+                  <div style="font-size: 14px; font-weight: 600;" id="contact-tel">313 7075008</div>
+                </div>
+              </div>
+              
+              <div style="display: flex; gap: 12px; align-items: center;">
+                <div style="padding: 8px; background-color: #f1f5f9; border-radius: 50%; color: var(--color-primary-light);">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                </div>
+                <div>
+                  <div style="font-size: 12px; color: var(--text-muted);">Correo Electrónico</div>
+                  <div style="font-size: 14px; font-weight: 600; word-break: break-all;" id="contact-email">conjuntoraquira@gmail.com</div>
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 12px; align-items: center;">
+                <div style="padding: 8px; background-color: #f1f5f9; border-radius: 50%; color: var(--color-primary-light);">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="10" r="3"></circle><path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 1 0-16 0c0 3 2.7 7 8 11.7z"></path></svg>
+                </div>
+                <div>
+                  <div style="font-size: 12px; color: var(--text-muted);">Ubicación</div>
+                  <div style="font-size: 14px; font-weight: 600;" id="contact-address">Calle 7 # 20B - 63 — Yumbo</div>
+                </div>
+              </div>
+            </div>
+            
+            <div style="margin-top: auto; padding: 12px; background-color: #eff6ff; border-radius: var(--radius-md); border: 1px solid #bfdbfe; font-size: 12px; color: var(--color-primary);">
+              <strong>Atención al Propietario:</strong><br>Lunes a Viernes: 8:00 AM - 12:00 PM y 2:00 PM - 5:00 PM. Sábados: 9:00 AM - 12:00 PM.
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ==========================================
+           SECCIÓN: CUENTAS Y PAGOS
+           ========================================== -->
+      <section class="view-section" id="view-pagos">
+        
+        <div class="payment-hero">
+          
+          <!-- Tarjeta Bancaria Visual -->
+          <div class="account-card-modern">
+            <div class="bank-logo-area">
+              <span class="bank-logo-text">Banco AV Villas</span>
+              <div class="card-chip"></div>
+            </div>
+            
+            <!-- Número de Cuenta Corriente Simulada -->
+            <div class="account-number">143-08734-4</div>
+            
+            <div class="account-details-flex">
+              <div class="account-detail-item">
+                <span class="label">Tipo de Cuenta</span>
+                <span class="val">Corriente</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Banner Promocional de Pago -->
+          <div class="payment-promo-card">
+            <h3 class="payment-promo-title">Pagos en Línea Seguros</h3>
+            <p style="color: var(--text-muted); font-size: 15px;">Realiza el pago de tus expensas comunes (administración), parqueadero o reservas de forma fácil y segura a través de la pasarela oficial de <strong>AvalPay Center</strong> de AV Villas.</p>
+            
+            <!-- Botón directo a la pasarela sin simulador -->
+            <a href="https://www.avalpaycenter.com/wps/portal/portal-de-pagos/web/pagos-aval/resultado-busqueda/realizar-pago?idConv=00026876&origen=buscar" target="_blank" class="btn-primary-gradient" id="btn-realizar-pago">
+              <span>Ir a AvalPay Center</span>
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </a>
+          </div>
+
+        </div>
+
+        <!-- Instrucciones Detalladas -->
+        <div class="dashboard-card">
+          <h3 class="dashboard-card-title" style="margin-bottom: 12px;">Instrucciones para el Pago</h3>
+          <ol style="padding-left: 20px; display: flex; flex-direction: column; gap: 8px; font-size: 14px; color: var(--text-muted);">
+            <li>Haz clic en el botón superior <strong>"Ir a AvalPay Center"</strong>.</li>
+            <li>En la pasarela de AV Villas, digita la información solicitada (Referencia de pago: tu torre y apartamento).</li>
+            <li>Ingresa el valor total a pagar según tu estado de cuenta.</li>
+            <li>Selecciona tu medio de pago (PSE, tarjetas de crédito si está habilitado).</li>
+            <li>Enviar soporte de pago al correo: <strong id="payment-instruction-email">conjuntoraquira@gmail.com</strong></li>
+          </ol>
+        </div>
+
+      </section>
+
+      <!-- ==========================================
+           SECCIÓN: RESERVAS DE ESPACIOS
+           ========================================== -->
+      <section class="view-section" id="view-reservas">
+        
+        <div class="reservation-layout">
+          
+          <!-- Configuración de Reserva -->
+          <div class="dashboard-card" style="display: flex; flex-direction: column; gap: 20px;">
+            <h3 class="dashboard-card-title">1. Selecciona el Área Común</h3>
+            
+            <!-- Selector dinámico de espacios -->
+            <div class="space-select-grid" id="spaces-grid-container">
+              <!-- Cargado por JS -->
+            </div>
+
+            <div id="space-info-box" style="padding: 16px; background-color: #f8fafc; border-radius: var(--radius-md); border: 1.5px dashed var(--border-color); display: none;">
+              <h4 id="selected-space-name" style="font-size: 15px; font-weight: 700; color: var(--color-primary); margin-bottom: 4px;">Salón Social</h4>
+              <p id="selected-space-details" style="font-size: 13px; color: var(--text-muted);">Capacidad máxima: 80 personas. Costo: $150,000 por evento.</p>
+            </div>
+
+            <h3 class="dashboard-card-title">2. Selecciona la Fecha</h3>
+            <!-- Calendario -->
+            <div class="calendar-widget">
+              <div class="calendar-header">
+                <button class="calendar-nav-btn" id="prev-month-btn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </button>
+                <h3 id="calendar-month-year">Junio 2026</h3>
+                <button class="calendar-nav-btn" id="next-month-btn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </button>
+              </div>
+              <div class="calendar-weekdays">
+                <div>DOM</div><div>LUN</div><div>MAR</div><div>MIE</div><div>JUE</div><div>VIE</div><div>SAB</div>
+              </div>
+              <div class="calendar-days-grid" id="calendar-days-container">
+                <!-- Días cargados dinámicamente -->
+              </div>
+            </div>
+            
+            <!-- Indicador de colores de calendario -->
+            <div style="display: flex; gap: 16px; font-size: 12px; color: var(--text-muted); justify-content: center;">
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span style="width: 12px; height: 12px; border-radius: 3px; border: 1px solid var(--color-primary-light);"></span> Hoy
+              </div>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span style="width: 12px; height: 12px; border-radius: 3px; background-color: var(--color-primary);"></span> Seleccionado
+              </div>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span style="width: 12px; height: 12px; border-radius: 3px; background-color: #fef3c7;"></span> Ocupado / Con Reserva
+              </div>
+            </div>
+          </div>
+
+          <!-- Historial y Formulario -->
+          <div style="display: flex; flex-direction: column; gap: 24px;">
+            
+            <!-- Formulario para reservar (Visible al seleccionar día y espacio) -->
+            <div class="dashboard-card" id="reservation-form-card" style="display: none;">
+              <h3 class="dashboard-card-title" style="margin-bottom: 16px;">Confirmar Reserva</h3>
+              <form id="reservation-form">
+                <input type="hidden" id="booking-space-id">
+                <input type="hidden" id="booking-date">
+                
+                <div style="background-color: #eff6ff; padding: 12px; border-radius: var(--radius-md); font-size: 13px; color: var(--color-primary); margin-bottom: 16px;">
+                  Reservando <strong id="booking-space-lbl">Salón Social</strong> para el día <strong id="booking-date-lbl">03/06/2026</strong>.
+                </div>
+
+                <div class="form-group">
+                  <label for="booking-name">Nombre Completo del Copropietario</label>
+                  <input type="text" id="booking-name" class="form-control" placeholder="Ej. Diego Perez" required>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                  <div class="form-group">
+                    <label for="booking-apt">Apartamento / Torre</label>
+                    <input type="text" id="booking-apt" class="form-control" placeholder="Ej. T2 Apt 405" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="booking-time">Horario</label>
+                    <select id="booking-time" class="form-control" required>
+                      <option value="Mañana (08:00 AM - 01:00 PM)">Mañana (08:00 AM - 01:00 PM)</option>
+                      <option value="Tarde (02:00 PM - 07:00 PM)">Tarde (02:00 PM - 07:00 PM)</option>
+                      <option value="Noche (07:00 PM - 11:59 PM)">Noche (07:00 PM - 11:59 PM)</option>
+                      <option value="Todo el día (08:00 AM - 11:59 PM)">Todo el día (08:00 AM - 11:59 PM)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="booking-purpose">Motivo / Tipo de Actividad</label>
+                  <input type="text" id="booking-purpose" class="form-control" placeholder="Ej. Cumpleaños infantil, Reunión familiar" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Solicitar Reserva</button>
+              </form>
+            </div>
+
+            <!-- Reservas Registradas -->
+            <div class="dashboard-card">
+              <h3 class="dashboard-card-title" style="margin-bottom: 16px;">Historial de Reservas</h3>
+              <div class="table-container">
+                <table class="custom-table" id="reservations-table">
+                  <thead>
+                    <tr>
+                      <th>Espacio</th>
+                      <th>Fecha</th>
+                      <th>Horario</th>
+                      <th>Apt</th>
+                      <th>Residente</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Filas cargadas dinámicamente -->
+                    <tr>
+                      <td colspan="5" class="text-muted" style="text-align: center;">No hay reservas registradas en este espacio.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- PANEL ADMINISTRATIVO DE ESPACIOS -->
+            <div class="dashboard-card admin-only" style="border: 1.5px solid var(--color-primary-light);">
+              <h3 class="dashboard-card-title" style="color: var(--color-primary); display: flex; justify-content: space-between; align-items: center;">
+                <span>Gestión de Espacios Comunes</span>
+                <span style="font-size: 11px; padding: 4px 8px; background-color: #dbeafe; color: var(--color-primary-light); border-radius: var(--radius-sm);">Admin Panel</span>
+              </h3>
+              <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px; margin-bottom: 12px;">Agrega o elimina espacios según aplique para el conjunto residencial actual.</p>
+              
+              <!-- Formulario rápido para añadir espacio -->
+              <form id="add-space-form" style="display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 8px; align-items: flex-end; margin-bottom: 16px;">
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label style="font-size: 11px;">Nombre del Espacio</label>
+                  <input type="text" id="new-space-name" class="form-control" placeholder="Ej. Gimnasio" required style="padding: 8px 12px;">
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label style="font-size: 11px;">Capacidad</label>
+                  <input type="number" id="new-space-cap" class="form-control" placeholder="20" required style="padding: 8px 12px;">
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label style="font-size: 11px;">Costo ($)</label>
+                  <input type="number" id="new-space-cost" class="form-control" placeholder="0" required style="padding: 8px 12px;">
+                </div>
+                <button type="submit" class="btn btn-primary" style="padding: 10px 14px; font-size: 13px;">Añadir</button>
+              </form>
+
+              <!-- Tabla de eliminación de espacios -->
+              <div class="table-container" style="max-height: 200px; overflow-y: auto;">
+                <table class="space-admin-table" id="space-admin-list">
+                  <thead>
+                    <tr>
+                      <th>Nombre</th>
+                      <th>Capacidad</th>
+                      <th>Costo</th>
+                      <th>Acción</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Cargados dinámicamente -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ==========================================
+           SECCIÓN: SOLICITUDES (MUDANZAS Y MATERIALES)
+           ========================================== -->
+      <section class="view-section" id="view-solicitudes">
+        
+        <div class="reservation-layout">
+          
+          <!-- Formularios de Solicitud -->
+          <div class="dashboard-card" style="display: flex; flex-direction: column; gap: 20px;">
+            
+            <!-- Selector de tipo de solicitud -->
+            <div style="display: flex; border: 1.5px solid var(--border-color); border-radius: var(--radius-md); overflow: hidden;">
+              <button class="btn btn-outline" id="toggle-mudanzas-btn" style="flex: 1; border-radius: 0; border: none; background-color: var(--color-primary); color: white;" onclick="toggleRequestType('mudanza')">Solicitud de Mudanza</button>
+              <button class="btn btn-outline" id="toggle-materiales-btn" style="flex: 1; border-radius: 0; border: none;" onclick="toggleRequestType('materiales')">Ingreso de Materiales</button>
+            </div>
+
+            <!-- Formulario Mudanza -->
+            <form id="mudanza-form" style="display: flex; flex-direction: column; gap: 16px;">
+              <h3 class="dashboard-card-title">Programar Mudanza</h3>
+              <p style="font-size: 13px; color: var(--text-muted);">Las mudanzas deben notificarse con al menos 48 horas de anticipación. El horario permitido es de Lunes a Sábado de 8:00 AM a 5:00 PM.</p>
+              
+              <div class="form-group">
+                <label for="mudanza-name">Nombre del Propietario / Residente</label>
+                <input type="text" id="mudanza-name" class="form-control" placeholder="Diego Pérez" required>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div class="form-group">
+                  <label for="mudanza-apt">Torre y Apartamento</label>
+                  <input type="text" id="mudanza-apt" class="form-control" placeholder="T2 Apt 405" required>
+                </div>
+                <div class="form-group">
+                  <label for="mudanza-type">Tipo de Mudanza</label>
+                  <select id="mudanza-type" class="form-control" required>
+                    <option value="Entrada">Entrada (Trasteo de ingreso)</option>
+                    <option value="Salida">Salida (Trasteo de egreso)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div class="form-group">
+                  <label for="mudanza-date">Fecha de Mudanza</label>
+                  <input type="date" id="mudanza-date" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label for="mudanza-time">Hora Estimada</label>
+                  <input type="time" id="mudanza-time" class="form-control" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="mudanza-company">Empresa de Transportes (Opcional)</label>
+                <input type="text" id="mudanza-company" class="form-control" placeholder="Ej. Transportes Rápidos S.A.S.">
+              </div>
+
+              <div class="form-group">
+                <label for="mudanza-details">Placas de Vehículo y Observaciones</label>
+                <textarea id="mudanza-details" class="form-control" placeholder="Ej. Camión tipo furgón de placas XYZ-123. Se ingresarán muebles de sala y alcobas."></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary" style="width: 100%;">Registrar Mudanza</button>
+            </form>
+
+            <!-- Formulario Materiales (Oculto inicialmente) -->
+            <form id="materiales-form" style="display: none; flex-direction: column; gap: 16px;">
+              <h3 class="dashboard-card-title">Registrar Ingreso de Materiales</h3>
+              <p style="font-size: 13px; color: var(--text-muted);">Registra la entrega de materiales de construcción, muebles de gran tamaño o electrodomésticos para autorizar el paso en la portería.</p>
+
+              <div class="form-group">
+                <label for="material-name">Nombre del Propietario / Destinatario</label>
+                <input type="text" id="material-name" class="form-control" placeholder="Diego Pérez" required>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div class="form-group">
+                  <label for="material-apt">Torre y Apartamento</label>
+                  <input type="text" id="material-apt" class="form-control" placeholder="T2 Apt 405" required>
+                </div>
+                <div class="form-group">
+                  <label for="material-date">Fecha de Entrega</label>
+                  <input type="date" id="material-date" class="form-control" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="material-company">Empresa Proveedora / Transportadora</label>
+                <input type="text" id="material-company" class="form-control" placeholder="Ej. Homecenter, Coordinadora, Remodelaciones" required>
+              </div>
+
+              <div class="form-group">
+                <label for="material-desc">Descripción de los Materiales / Elementos</label>
+                <textarea id="material-desc" class="form-control" placeholder="Ej. 10 bolsas de cemento, 5 cajas de baldosa de cerámica para remodelación de baño." required></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary" style="width: 100%;">Registrar Entrega</button>
+            </form>
+
+          </div>
+
+          <!-- Historial de Solicitudes -->
+          <div class="dashboard-card" style="display: flex; flex-direction: column; gap: 16px;">
+            <h3 class="dashboard-card-title">Historial de Solicitudes</h3>
+            <div class="table-container">
+              <table class="custom-table" id="requests-table">
+                <thead>
+                  <tr>
+                    <th>Tipo</th>
+                    <th>Fecha/Hora</th>
+                    <th>Apt</th>
+                    <th>Detalles</th>
+                    <th>Estado</th>
+                    <th class="admin-only">Acción</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Cargado dinámicamente con JS -->
+                  <tr>
+                    <td colspan="6" class="text-muted" style="text-align: center;">No hay solicitudes programadas.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ==========================================
+           SECCIÓN: AVISOS Y CIRCULARES
+           ========================================== -->
+      <section class="view-section" id="view-avisos">
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <h2 class="dashboard-card-title" style="font-size: 20px;">Tablón Informativo Oficial</h2>
+          
+          <!-- Botón abrir modal para crear aviso -->
+          <button class="btn btn-primary admin-only" onclick="openModal('modal-notice')">
+            Publicar Aviso
+          </button>
+        </div>
+
+        <div class="carousel-container" style="position: relative; margin-top: 16px;">
+          <!-- Botón anterior -->
+          <button class="carousel-nav-btn prev-btn" id="notice-prev-btn" onclick="slideNotices('prev')">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" style="margin:0;"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </button>
+          
+          <!-- Carrete -->
+          <div class="notices-carousel" id="notices-list-container">
+            <!-- Anuncios cargados por JS -->
+          </div>
+          
+          <!-- Botón siguiente -->
+          <button class="carousel-nav-btn next-btn" id="notice-next-btn" onclick="slideNotices('next')">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" style="margin:0;"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+        </div>
+
+      </section>
+
+      <!-- ==========================================
+           SECCIÓN: INFORME DE GESTIÓN ADMINISTRATIVA
+           ========================================== -->
+      <section class="view-section" id="view-informe">
+        <div class="dashboard-card" style="display: flex; flex-direction: column; gap: 20px; min-height: 70vh;">
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+            <div>
+              <h3 class="dashboard-card-title" style="font-size: 20px;">Informe de Gestión Administrativa</h3>
+              <p style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">Visualiza el reporte detallado del estado de la copropiedad.</p>
+            </div>
+            
+            <!-- Panel de Carga del Informe (Visible solo para administradores) -->
+            <div class="admin-only" style="display: flex; gap: 12px; align-items: center; background-color: #f8fafc; padding: 8px 16px; border-radius: 8px; border: 1px solid var(--border-color); flex-wrap: wrap;">
+              <div style="font-size: 11px; color: var(--text-muted); text-align: right;" id="report-upload-status">
+                Cargando informe por defecto...
+              </div>
+              <input type="file" id="report-file-input" accept=".html" style="display: none;">
+              <button class="btn btn-primary" style="font-size: 12px; padding: 8px 16px;" onclick="document.getElementById('report-file-input').click()">
+                Cambiar Informe (HTML)
+              </button>
+              <button class="btn btn-outline" id="btn-reset-report" style="font-size: 12px; padding: 8px 16px;">
+                Restaurar por defecto
+              </button>
+            </div>
+          </div>
+          
+          <!-- Contenedor del Iframe -->
+          <div style="flex: 1; border: 1.5px solid var(--border-color); border-radius: var(--radius-md); overflow: hidden; background-color: white; height: 65vh; position: relative;">
+            <iframe id="report-iframe" style="width: 100%; height: 100%; border: none;" src="informe_raquira_UNICO.html"></iframe>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SECCIÓN: PQR
+           ========================================== -->
+      <section class="view-section" id="view-pqrs">
+        
+        <div class="reservation-layout">
+          
+          <!-- Formulario PQR -->
+          <div class="dashboard-card">
+            <h3 class="dashboard-card-title" style="margin-bottom: 16px;">Radicar PQR</h3>
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Radica tus Peticiones, Quejas, Reclamos o Sugerencias directamente con la administración. Te responderemos en un plazo máximo de 5 días hábiles.</p>
+            
+            <form id="pqr-form" style="display: flex; flex-direction: column; gap: 16px;">
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div class="form-group">
+                  <label for="pqr-name">Nombre Completo</label>
+                  <input type="text" id="pqr-name" class="form-control" placeholder="Diego Pérez" required>
+                </div>
+                <div class="form-group">
+                  <label for="pqr-apt">Torre y Apartamento</label>
+                  <input type="text" id="pqr-apt" class="form-control" placeholder="T2 Apt 405" required>
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div class="form-group">
+                  <label for="pqr-type">Tipo de Solicitud</label>
+                  <select id="pqr-type" class="form-control" required>
+                    <option value="Petición">Petición</option>
+                    <option value="Queja">Queja</option>
+                    <option value="Reclamo">Reclamo</option>
+                    <option value="Sugerencia">Sugerencia</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="pqr-subject">Asunto Corto</label>
+                  <input type="text" id="pqr-subject" class="form-control" placeholder="Ej. Humedad en fachada" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="pqr-desc">Descripción Detallada</label>
+                <textarea id="pqr-desc" class="form-control" placeholder="Escribe aquí los detalles del caso, fechas e implicados." required></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="pqr-attachment">Adjuntar Soporte (Imagen, Video o Documento - Max 2MB)</label>
+                <input type="file" id="pqr-attachment" class="form-control" accept="image/*,video/*,.pdf,.doc,.docx" style="padding: 6px 12px;">
+                <span style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Formatos soportados: imágenes, videos y documentos PDF/Word.</span>
+              </div>
+
+              <button type="submit" class="btn btn-primary" style="width: 100%;">Enviar PQR</button>
+            </form>
+          </div>
+
+          <!-- Historial PQRs -->
+          <div style="display: flex; flex-direction: column; gap: 20px;">
+            <h3 class="dashboard-card-title">Listado y Seguimiento de PQRs</h3>
+            
+            <div class="pqr-list" id="pqrs-list-container">
+              <!-- Cargado dinámicamente con JS (Acordeón) -->
+              <p class="text-muted" style="text-align: center; padding: 40px; background: white; border-radius: var(--radius-lg); border: 1.5px solid var(--border-color);">No hay PQRs radicados.</p>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ==========================================
+           SECCIÓN: CONFIGURACIÓN
+           ========================================== -->
+      <section class="view-section" id="view-config">
+        
+        <div class="config-layout">
+          
+          <!-- Formulario de Configuración General -->
+          <div class="dashboard-card" style="display: flex; flex-direction: column; gap: 24px;">
+            <h3 class="dashboard-card-title" style="color: var(--color-primary);">Datos Generales de la Copropiedad</h3>
+            
+            <form id="config-form" style="display: flex; flex-direction: column; gap: 16px;">
+              <div class="form-group">
+                <label for="cfg-name">Nombre del Conjunto Residencial</label>
+                <input type="text" id="cfg-name" class="form-control" value="Conjunto Residencial Ráquira" required>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div class="form-group">
+                  <label for="cfg-nit">NIT</label>
+                  <input type="text" id="cfg-nit" class="form-control" value="901.900.228" required>
+                </div>
+                <div class="form-group">
+                  <label for="cfg-admin">Administrador / Representante Legal</label>
+                  <input type="text" id="cfg-admin" class="form-control" value="Sandra Liliana Iquinas" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="cfg-address">Dirección</label>
+                <input type="text" id="cfg-address" class="form-control" value="Calle 7 # 20B - 63 — Yumbo" required>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+                <div class="form-group">
+                  <label for="cfg-tel">Teléfono de Atención</label>
+                  <input type="text" id="cfg-tel" class="form-control" value="313 7075008" required>
+                </div>
+                <div class="form-group">
+                  <label for="cfg-email">Correo Electrónico</label>
+                  <input type="email" id="cfg-email" class="form-control" value="conjuntoraquira@gmail.com" required>
+                </div>
+                <div class="form-group">
+                  <label for="cfg-pin">PIN Administrador</label>
+                  <input type="password" id="cfg-pin" class="form-control" value="1234" required style="letter-spacing: 2px;">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Logotipo del Conjunto</label>
+                <div style="display: flex; gap: 16px; align-items: center; margin-top: 4px;">
+                  <div style="width: 64px; height: 64px; border: 1.5px solid var(--border-color); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; overflow: hidden; background: white;" id="cfg-logo-preview">
+                    <!-- Preview -->
+                  </div>
+                  <input type="file" id="cfg-logo-file" accept="image/*" style="display: none;">
+                  <button type="button" class="btn btn-outline" onclick="document.getElementById('cfg-logo-file').click()">Subir Logotipo</button>
+                  <button type="button" class="btn btn-danger" style="padding: 8px 16px;" id="btn-reset-logo">Restaurar Original</button>
+                </div>
+              </div>
+
+              <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 12px 0;">
+
+              <h3 class="dashboard-card-title" style="color: var(--color-primary);">Conexión Base de Datos (Google Sheets)</h3>
+              <div class="form-group">
+                <label for="cfg-sheets-url">URL de Aplicación Web (Google Apps Script)</label>
+                <input type="url" id="cfg-sheets-url" class="form-control" placeholder="https://script.google.com/macros/s/.../exec">
+                <span style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Deja este campo en blanco para usar la base de datos local temporal (LocalStorage). Al ingresar una URL válida, los datos se leerán y escribirán en tu Google Sheet automáticamente.</span>
+              </div>
+
+              <button type="submit" class="btn btn-primary" style="align-self: flex-start; padding: 14px 28px;">Guardar Configuración</button>
+            </form>
+          </div>
+
+          <!-- Tutorial de Enlace Google Sheets -->
+          <div class="tutorial-card">
+            <h3 class="dashboard-card-title" style="font-size: 16px;">¿Cómo conectar Google Sheets?</h3>
+            <p style="font-size: 12px; color: var(--text-muted);">Sigue estos sencillos pasos para activar tu base de datos en la nube y ver las reservas, mudanzas y PQRs en una hoja de cálculo de Google:</p>
+            
+            <div class="tutorial-step">
+              <div class="step-number">1</div>
+              <div class="step-text">Abre <strong><a href="https://sheet.new" target="_blank" style="color: var(--color-primary-light); font-weight: 600;">Google Sheets</a></strong> y crea una hoja de cálculo en blanco.</div>
+            </div>
+
+            <div class="tutorial-step">
+              <div class="step-number">2</div>
+              <div class="step-text">Ve al menú: <strong>Extensiones -> Apps Script</strong>. Borra el código de ejemplo.</div>
+            </div>
+
+            <div class="tutorial-step">
+              <div class="step-number">3</div>
+              <div class="step-text">
+                Copia todo el código ubicado en el archivo local de la aplicación: 
+                <div class="code-snippet">[google_apps_script.js]</div>
+                Pégalo en el editor de Apps Script y haz clic en <strong>Guardar</strong> (ícono de disco).
+              </div>
+            </div>
+
+            <div class="tutorial-step">
+              <div class="step-number">4</div>
+              <div class="step-text">Haz clic en el botón superior azul: <strong>Implementar -> Nueva implementación</strong>.</div>
+            </div>
+
+            <div class="tutorial-step">
+              <div class="step-number">5</div>
+              <div class="step-text">Selecciona tipo <strong>"Aplicación web"</strong> e ingresa:<br>
+                - Ejecutar como: <strong>Tú</strong> (tu correo)<br>
+                - Quién tiene acceso: <strong>Cualquiera</strong> (Muy importante).
+              </div>
+            </div>
+
+            <div class="tutorial-step">
+              <div class="step-number">6</div>
+              <div class="step-text">Presiona <strong>"Implementar"</strong>, concede los permisos de Google, copia la <strong>URL de la Aplicación Web</strong> generada y pégala en el formulario de la izquierda. ¡Listo!</div>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+  <!-- ==========================================
+       MODAL WINDOWS
+       ========================================== -->
+  
+  <!-- Modal: Crear Aviso -->
+  <div class="modal-overlay" id="modal-notice">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3>Publicar Nuevo Aviso Oficial</h3>
+        <button class="modal-close-btn" onclick="closeModal('modal-notice')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="new-notice-form">
+          <div class="form-group">
+            <label for="notice-title">Título del Aviso</label>
+            <input type="text" id="notice-title" class="form-control" placeholder="Ej. Mantenimiento Preventivo de Ascensores" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="notice-category">Categoría</label>
+            <select id="notice-category" class="form-control" required>
+              <option value="circular">Circular / Boletín</option>
+              <option value="mantenimiento">Mantenimiento</option>
+              <option value="evento">Evento / Actividades</option>
+              <option value="general">Información General</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="notice-body">Contenido / Mensaje</label>
+            <textarea id="notice-body" class="form-control" placeholder="Escribe el comunicado para los copropietarios..." required></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 12px;">Publicar Aviso</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Responder PQR -->
+  <div class="modal-overlay" id="modal-pqr-reply">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3>Responder Radicado PQR</h3>
+        <button class="modal-close-btn" onclick="closeModal('modal-pqr-reply')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="pqr-reply-form">
+          <input type="hidden" id="reply-pqr-id">
+          
+          <div style="background-color: #f8fafc; padding: 12px; border-radius: var(--radius-md); font-size: 13px; margin-bottom: 16px; border: 1.5px solid var(--border-color);" id="reply-pqr-meta">
+            <!-- Cargado por JS -->
+          </div>
+
+          <div class="form-group">
+            <label for="reply-status">Actualizar Estado</label>
+            <select id="reply-status" class="form-control" required>
+              <option value="En Proceso">En Proceso</option>
+              <option value="Resuelto">Resuelto</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="reply-content">Respuesta de la Administración</label>
+            <textarea id="reply-content" class="form-control" placeholder="Escribe la respuesta oficial que se enviará al propietario..." required></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 12px;">Enviar Respuesta</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Ingresar como Administrador -->
+  <div class="modal-overlay" id="modal-admin-login">
+    <div class="modal-window" style="max-width: 400px;">
+      <div class="modal-header">
+        <h3>Acceso de Administrador</h3>
+        <button class="modal-close-btn" onclick="closeModal('modal-admin-login')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="admin-login-form">
+          <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Ingresa el PIN de seguridad de la administración para habilitar las opciones de edición, aprobación y configuración del portal.</p>
+          <div class="form-group">
+            <label for="admin-pin-input">PIN de Seguridad</label>
+            <input type="password" id="admin-pin-input" class="form-control" placeholder="Ej. 1234" required style="text-align: center; font-size: 18px; letter-spacing: 4px;">
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 12px;">Verificar PIN</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Diagnóstico de Conexión Google Sheets -->
+  <div class="modal-overlay" id="modal-db-troubleshoot">
+    <div class="modal-window" style="max-width: 550px;">
+      <div class="modal-header">
+        <h3>Diagnóstico de Conexión Google Sheets</h3>
+        <button class="modal-close-btn" onclick="closeModal('modal-db-troubleshoot')">&times;</button>
+      </div>
+      <div class="modal-body" style="display: flex; flex-direction: column; gap: 16px; font-size: 14px;">
+        <p>El portal web está teniendo problemas para conectarse con tu base de datos en Google Sheets. Por favor, verifica las siguientes causas comunes:</p>
+        
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="background-color: #fef2f2; border-left: 4px solid #ef4444; padding: 12px; border-radius: 4px; border-top: 1px solid #fee2e2; border-right: 1px solid #fee2e2; border-bottom: 1px solid #fee2e2;">
+            <strong style="color: #991b1b; display: block; margin-bottom: 4px;">1. Acceso del Web App Incorrecto (Causa más común)</strong>
+            <p style="color: #7f1d1d; font-size: 13px; margin: 0; line-height: 1.4;">
+              Al implementar la aplicación web en Google Apps Script, debes configurar el acceso de forma que <strong>Cualquiera (Anyone)</strong> pueda ingresar. De lo contrario, Google bloqueará la conexión externa por seguridad (error de CORS).<br>
+              <strong>Solución:</strong> En el editor de Apps Script de tu hoja, ve a <em>Implementar -> Administrar implementaciones -> Editar</em> (ícono de lápiz), cambia "Quién tiene acceso" a <strong>"Cualquiera"</strong>, y presiona <em>Volver a implementar</em>.
+            </p>
+          </div>
+
+          <div style="background-color: #fffbeb; border-left: 4px solid #f59e0b; padding: 12px; border-radius: 4px; border-top: 1px solid #fef3c7; border-right: 1px solid #fef3c7; border-bottom: 1px solid #fef3c7;">
+            <strong style="color: #92400e; display: block; margin-bottom: 4px;">2. URL incorrecta de Editor en lugar de Web App</strong>
+            <p style="color: #78350f; font-size: 13px; margin: 0; line-height: 1.4;">
+              La URL debe terminar en <code>/exec</code> y no en <code>/edit</code>. La URL del editor de scripts no sirve como base de datos.<br>
+              <strong>Solución:</strong> Copia la <em>"URL de la aplicación web"</em> que te da Google al finalizar la implementación. Ej: <code>https://script.google.com/macros/s/.../exec</code>
+            </p>
+          </div>
+
+          <div style="background-color: #eff6ff; border-left: 4px solid #3b82f6; padding: 12px; border-radius: 4px; border-top: 1px solid #dbeafe; border-right: 1px solid #dbeafe; border-bottom: 1px solid #dbeafe;">
+            <strong style="color: #1e40af; display: block; margin-bottom: 4px;">3. Permisos pendientes de Autorización</strong>
+            <p style="color: #1e3a8a; font-size: 13px; margin: 0; line-height: 1.4;">
+              Google Sheets requiere que apruebes expresamente los permisos de escritura del script en tu cuenta de Google.<br>
+              <strong>Solución:</strong> Haz clic en <em>"Autorizar acceso"</em> durante la implementación de tu script y sigue los pasos en pantalla.
+            </p>
+          </div>
+        </div>
+        
+        <div style="display: flex; gap: 12px; margin-top: 12px; border-top: 1px solid var(--border-color); padding-top: 16px; justify-content: flex-end;">
+          <button class="btn btn-outline" onclick="closeModal('modal-db-troubleshoot')">Cerrar</button>
+          <button class="btn btn-primary" onclick="closeModal('modal-db-troubleshoot'); navigateToTab('view-config');">Revisar Configuración</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cargar JavaScript de la SPA -->
+  <script src="app.js"></script>
+</body>
+</html>
