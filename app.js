@@ -1631,3 +1631,15 @@ function setupReportUploader() {
     });
   }
 }
+
+// Función global para sincronizar el menú lateral cuando se navega desde el Bento Grid
+window.setActiveMenuItem = function(targetViewId) {
+  const menuItems = document.querySelectorAll(".sidebar-menu .menu-item");
+  menuItems.forEach(item => {
+    if (item.getAttribute("data-target") === targetViewId) {
+      item.classList.add("active");
+    } else {
+      item.classList.remove("active");
+    }
+  });
+};

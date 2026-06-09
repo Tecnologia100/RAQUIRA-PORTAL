@@ -1388,3 +1388,275 @@ body.admin-mode-active #btn-admin-toggle svg {
   color: #10b981 !important;
 }
 
+/* ==========================================================================
+   PORTADA HERO Y BENTO GRID (REDISEÑO INICIO)
+   ========================================================================== */
+.hero-section {
+  position: relative;
+  height: 260px;
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-md);
+}
+
+.hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(15, 23, 42, 0.9) 0%, rgba(15, 23, 42, 0.3) 60%, transparent 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 24px;
+}
+
+.hero-title {
+  color: white !important;
+  font-size: 28px;
+  font-weight: 800;
+  margin: 0 0 4px 0;
+  letter-spacing: -0.5px;
+}
+
+.hero-subtitle {
+  color: #93c5fd !important;
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0;
+}
+
+/* Tarjeta de bienvenida de administración */
+.welcome-card-new {
+  background-color: var(--bg-card);
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.welcome-card-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.admin-icon-container {
+  width: 48px;
+  height: 48px;
+  background-color: #eff6ff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary-light);
+}
+
+.admin-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0;
+}
+
+.admin-name {
+  font-size: 14px;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin: 2px 0 0 0;
+}
+
+.admin-desc {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin: 0 0 16px 0;
+}
+
+.admin-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-color);
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.info-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.info-value {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.info-item.border-left {
+  border-left: 1px solid var(--border-color);
+  padding-left: 16px;
+}
+
+/* Bento Grid */
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.bento-card {
+  background: white;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
+
+.bento-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-primary-light);
+}
+
+.bento-card:active {
+  transform: scale(0.97);
+}
+
+.bento-card.col-span-2 {
+  grid-column: span 2;
+}
+
+.bento-card.card-pay {
+  background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-primary) 100%);
+  color: white;
+  height: 140px;
+  justify-content: space-between;
+  border: none;
+}
+
+.bento-card.card-pay .card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bento-card.card-pay .card-icon-bg {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 10px;
+  border-radius: var(--radius-md);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bento-card.card-pay .card-bottom h4 {
+  font-size: 20px;
+  font-weight: 800;
+  margin: 0 0 2px 0;
+  color: white;
+}
+
+.bento-card.card-pay .card-bottom p {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+}
+
+.bento-card.card-tall {
+  height: 110px;
+  justify-content: space-between;
+}
+
+.bento-card.bg-light-blue {
+  background-color: #eff6ff;
+  border-color: #bfdbfe;
+}
+
+.bento-card .card-icon-bg-light {
+  background: #eff6ff;
+  color: var(--color-primary-light);
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bento-card .card-icon-bg-white {
+  background: white;
+  color: var(--color-primary-light);
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
+}
+
+.bento-card .card-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.bento-card h4 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0;
+}
+
+.bento-card p {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+@media (max-width: 640px) {
+  .bento-grid {
+    grid-template-columns: 1fr;
+  }
+  .bento-card.col-span-2 {
+    grid-column: span 1;
+  }
+  .admin-info-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .info-item.border-left {
+    border-left: none;
+    padding-left: 0;
+  }
+}
+
