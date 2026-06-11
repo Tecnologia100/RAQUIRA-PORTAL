@@ -670,32 +670,20 @@
            SECCIÓN: INFORME DE GESTIÓN ADMINISTRATIVA
            ========================================== -->
       <section class="view-section" id="view-informe">
-        <div class="dashboard-card" style="display: flex; flex-direction: column; gap: 20px; min-height: 70vh;">
-          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 16px; flex-wrap: wrap; gap: 12px;">
-            <div>
-              <h3 class="dashboard-card-title" style="font-size: 20px;">Informe de Gestión Administrativa</h3>
-              <p style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">Visualiza el reporte detallado del estado de la copropiedad.</p>
-            </div>
-            
-            <!-- Panel de Carga del Informe (Visible solo para administradores) -->
-            <div class="admin-only" style="display: flex; gap: 12px; align-items: center; background-color: #f8fafc; padding: 8px 16px; border-radius: 8px; border: 1px solid var(--border-color); flex-wrap: wrap;">
-              <div style="font-size: 11px; color: var(--text-muted); text-align: right;" id="report-upload-status">
-                Cargando informe por defecto...
-              </div>
-              <input type="file" id="report-file-input" accept=".html" style="display: none;">
-              <button class="btn btn-primary" style="font-size: 12px; padding: 8px 16px;" onclick="document.getElementById('report-file-input').click()">
-                Cambiar Informe (HTML)
-              </button>
-              <button class="btn btn-outline" id="btn-reset-report" style="font-size: 12px; padding: 8px 16px;">
-                Restaurar por defecto
-              </button>
-            </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 16px;">
+          <div>
+            <h3 class="dashboard-card-title" style="font-size: 20px;">Informe de Gestión Administrativa</h3>
+            <p style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">Consulta y descarga los reportes oficiales y estados financieros de la copropiedad.</p>
           </div>
           
-          <!-- Contenedor del Iframe -->
-          <div style="flex: 1; border: 1.5px solid var(--border-color); border-radius: var(--radius-md); overflow: hidden; background-color: white; height: 65vh; position: relative;">
-            <iframe id="report-iframe" style="width: 100%; height: 100%; border: none;" src="informe_raquira_UNICO.html"></iframe>
-          </div>
+          <!-- Botón de publicar informe (Visible solo para administradores) -->
+          <button class="btn btn-primary admin-only" onclick="openModal('modal-report')">
+            Publicar Informe
+          </button>
+        </div>
+
+        <div class="reports-grid" id="reports-list-container">
+          <!-- Informes cargados dinámicamente con JS -->
         </div>
       </section>
 
@@ -755,7 +743,7 @@
           </div>
 
           <!-- Historial PQRs -->
-          <div style="display: flex; flex-direction: column; gap: 20px;">
+          <div style="display: flex; flex-direction: column; gap: 20px;" class="admin-only">
             <h3 class="dashboard-card-title">Listado y Seguimiento de PQRs</h3>
             
             <div class="pqr-list" id="pqrs-list-container">
@@ -1025,6 +1013,37 @@
           <button class="btn btn-outline" onclick="closeModal('modal-db-troubleshoot')">Cerrar</button>
           <button class="btn btn-primary" onclick="closeModal('modal-db-troubleshoot'); navigateToTab('view-config');">Revisar Configuración</button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Publicar Informe -->
+  <div class="modal-overlay" id="modal-report">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3>Publicar Nuevo Informe de Gestión</h3>
+        <button class="modal-close-btn" onclick="closeModal('modal-report')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="new-report-form">
+          <div class="form-group">
+            <label for="report-title">Título del Informe</label>
+            <input type="text" id="report-title" class="form-control" placeholder="Ej. Informe de Gestión - Mayo 2026" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="report-desc">Descripción / Resumen</label>
+            <textarea id="report-desc-input" class="form-control" placeholder="Escribe un breve resumen de los temas tratados en el informe..." required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="report-attachment-input">Adjuntar Archivo (PDF, Documento o Imagen - Max 2MB)</label>
+            <input type="file" id="report-attachment-input" class="form-control" accept=".pdf,.doc,.docx,image/*" required style="padding: 6px 12px;">
+            <span style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Soportado: PDF, Word e imágenes.</span>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 12px;">Publicar Informe</button>
+        </form>
       </div>
     </div>
   </div>

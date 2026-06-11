@@ -15,9 +15,7 @@ let appState = {
     email: "conjuntoraquira@gmail.com",
     logoData: null, // Guardará base64
     sheetsUrl: "",   // URL de Google Apps Script Web App
-    adminPin: "1234", // PIN por defecto
-    reportFilename: "informe_raquira_UNICO.html",
-    reportDataUrl: null
+    adminPin: "1234" // PIN por defecto
   },
   spaces: [
     { name: "Salón Social", capacity: 80, cost: 150000, icon: "home" },
@@ -115,6 +113,17 @@ let appState = {
       dateCreated: "2026-06-03T08:15:00.000Z",
       dateUpdated: ""
     }
+  ],
+  reports: [
+    {
+      id: "rep-1",
+      title: "Informe de Gestión - Mayo 2026",
+      description: "Resumen detallado de las actividades realizadas, mantenimiento de áreas comunes y estado de cuentas de la copropiedad durante el mes de mayo.",
+      date: "2026-05-31",
+      attachmentName: "Informe_Gestion_Mayo_2026.txt",
+      attachmentUrl: "data:text/plain;base64,SW5mb3JtZSBkZSBHZXN0acOzbiAtIE1heW8gMjAyNgpDb25qdW50byBSZXNpZGVuY2lhbCBSw6FxdWlyYQoKVG9kbyBlc3RhIGVuIG9yZGVuLg==",
+      dateCreated: new Date().toISOString()
+    }
   ]
 };
 
@@ -152,7 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setupPqrForms();
   setupPqrReplyForm();
   setupAdminLogin();
-  setupReportUploader();
+  setupReportForm();
 
   // Cargar datos del servidor Sheets en segundo plano si está configurado
   if (appState.config.sheetsUrl) {
@@ -181,8 +190,19 @@ function loadData() {
       if (!appState.config.adminPin) {
         appState.config.adminPin = "1234";
       }
-      if (!appState.config.reportFilename) {
-        appState.config.reportFilename = "informe_raquira_UNICO.html";
+      // Inicializar lista de informes si no existe o está vacía
+      if (!appState.reports || appState.reports.length === 0) {
+        appState.reports = [
+          {
+            id: "rep-1",
+            title: "Informe de Gestión - Mayo 2026",
+            description: "Resumen detallado de las actividades realizadas, mantenimiento de áreas comunes y estado de cuentas de la copropiedad durante el mes de mayo.",
+            date: "2026-05-31",
+            attachmentName: "Informe_Gestion_Mayo_2026.txt",
+            attachmentUrl: "data:text/plain;base64,SW5mb3JtZSBkZSBHZXN0acOzbiAtIE1heW8gMjAyNgpDb25qdW50byBSZXNpZGVuY2lhbCBSw6FxdWlyYQoKVG9kbyBlc3RhIGVuIG9yZGVuLg==",
+            dateCreated: new Date().toISOString()
+          }
+        ];
       }
     } catch (e) {
       console.error("Error al parsear el estado guardado", e);
@@ -287,6 +307,31 @@ async function syncWithGoogleSheets() {
         }));
       }
 
+      // Mapear informes
+      if (result.reports) {
+        appState.reports = result.reports.map(rep => ({
+          id: rep.id,
+          title: rep.title,
+          description: rep.description,
+          date: rep.date.split("T")[0],
+          attachmentName: rep.attachmentName,
+          attachmentUrl: rep.attachmentUrl,
+          dateCreated: rep.dateCreated
+        }));
+      } else if (!appState.reports || appState.reports.length === 0) {
+        appState.reports = [
+          {
+            id: "rep-1",
+            title: "Informe de Gestión - Mayo 2026",
+            description: "Resumen detallado de las actividades realizadas, mantenimiento de áreas comunes y estado de cuentas de la copropiedad durante el mes de mayo.",
+            date: "2026-05-31",
+            attachmentName: "Informe_Gestion_Mayo_2026.txt",
+            attachmentUrl: "data:text/plain;base64,SW5mb3JtZSBkZSBHZXN0acOzbiAtIE1heW8gMjAyNgpDb25qdW50byBSZXNpZGVuY2lhbCBSw6FxdWlyYQoKVG9kbyBlc3RhIGVuIG9yZGVuLg==",
+            dateCreated: new Date().toISOString()
+          }
+        ];
+      }
+      
       saveData();
       badge.classList.add("connected");
       text.innerText = "Base de datos en Línea (Google Sheets)";
@@ -445,22 +490,8 @@ function updateUI() {
   document.getElementById("cfg-pin").value = appState.config.adminPin;
   document.getElementById("cfg-sheets-url").value = appState.config.sheetsUrl;
 
-  // Cargar el informe de gestión en el iframe
-  const iframe = document.getElementById("report-iframe");
-  const statusLabel = document.getElementById("report-upload-status");
-  if (iframe) {
-    const targetSrc = appState.config.reportDataUrl || appState.config.reportFilename || "informe_raquira_UNICO.html";
-    if (iframe.getAttribute("src") !== targetSrc) {
-      iframe.src = targetSrc;
-    }
-    if (statusLabel) {
-      if (appState.config.reportDataUrl) {
-        statusLabel.innerText = `Memoria: ${appState.config.reportFilename}`;
-      } else {
-        statusLabel.innerHTML = `Archivo local: <strong>${appState.config.reportFilename || "informe_raquira_UNICO.html"}</strong>`;
-      }
-    }
-  }
+  // 6. Renderizar informes de gestión
+  renderReports();
 }
 
 // Renderizado del logotipo (SVG o Imagen cargada en base64)
@@ -1293,11 +1324,16 @@ function renderPqrsList() {
   const container = document.getElementById("pqrs-list-container");
   container.innerHTML = "";
 
-  // Filtrar las no solucionadas (status !== "Resuelto")
-  const activePqrs = appState.pqrs.filter(p => p.status !== "Resuelto");
+  // Filtrar las no solucionadas (status !== "Resuelto"). Si es residente, tampoco ver las pendientes
+  const activePqrs = appState.pqrs.filter(p => {
+    if (p.status === "Resuelto") return false;
+    if (!isAdmin && p.status === "Pendiente") return false;
+    return true;
+  });
 
   if (activePqrs.length === 0) {
-    container.innerHTML = `<p class="text-muted" style="text-align: center; padding: 40px; background: white; border-radius: var(--radius-lg); border: 1.5px solid var(--border-color);">No hay PQRs pendientes o en proceso.</p>`;
+    const noPqrMessage = isAdmin ? "No hay PQRs pendientes o en proceso." : "No hay PQRs en proceso actualmente.";
+    container.innerHTML = `<p class="text-muted" style="text-align: center; padding: 40px; background: white; border-radius: var(--radius-lg); border: 1.5px solid var(--border-color);">${noPqrMessage}</p>`;
     return;
   }
 
@@ -1493,6 +1529,7 @@ function setupAdminLogin() {
       renderRequestsTable();
       renderPqrsList();
       renderNotices();
+      renderReports();
       
       alert("Modo Administrador activado con éxito. Ahora tienes acceso a las opciones de edición y configuración.");
     } else {
@@ -1532,6 +1569,7 @@ window.handleAdminToggle = function() {
     renderRequestsTable();
     renderPqrsList();
     renderNotices();
+    renderReports();
     
     alert("Modo Administrador desactivado. Has vuelto a la vista pública de residente.");
   } else {
@@ -1553,84 +1591,143 @@ window.slideNotices = function(direction) {
   }
 };
 
-// Configuración de la carga manual del Informe de Gestión
-function setupReportUploader() {
-  const fileInput = document.getElementById("report-file-input");
-  const resetBtn = document.getElementById("btn-reset-report");
-  
-  if (fileInput) {
-    fileInput.addEventListener("change", (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
+// Renderizar cuadrícula de informes
+function renderReports() {
+  const container = document.getElementById("reports-list-container");
+  if (!container) return;
+  container.innerHTML = "";
 
-      if (!file.name.endsWith(".html")) {
-        alert("Por favor, selecciona un archivo con extensión .html");
-        fileInput.value = "";
+  if (!appState.reports || appState.reports.length === 0) {
+    container.innerHTML = `<p class="text-muted" style="grid-column: 1/-1; text-align:center; padding: 40px; background: white; border-radius: var(--radius-lg); border: 1.5px solid var(--border-color);">No hay informes de gestión publicados.</p>`;
+    return;
+  }
+
+  const sortedReports = [...appState.reports].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  sortedReports.forEach(rep => {
+    const card = document.createElement("div");
+    card.className = "report-card";
+
+    const parts = rep.date.split("-");
+    const formattedDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
+
+    card.innerHTML = `
+      <div class="report-header">
+        <div class="report-icon-container">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+        </div>
+        <span class="report-date">Fecha: ${formattedDate}</span>
+      </div>
+      <h3 class="report-title">${rep.title}</h3>
+      <p class="report-content" title="${rep.description}">${rep.description}</p>
+      <div class="report-footer">
+        ${rep.attachmentUrl ? `
+          <a href="${rep.attachmentUrl}" download="${rep.attachmentName || 'informe'}" class="btn btn-outline" style="padding: 6px 12px; font-size: 12px; display: inline-flex; align-items: center; gap: 6px;">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            Descargar
+          </a>
+        ` : `<span style="font-size: 12px; color: var(--text-muted);">Sin archivo</span>`}
+        
+        <button class="btn btn-danger admin-only" onclick="deleteReport('${rep.id}')" title="Eliminar informe" style="padding: 6px 10px; font-size: 12px; display: inline-flex; align-items: center; justify-content: center;">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" style="margin: 0;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+        </button>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+// Configurar formulario de publicación de informes
+function setupReportForm() {
+  const form = document.getElementById("new-report-form");
+  if (!form) return;
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const title = document.getElementById("report-title").value.trim();
+    const description = document.getElementById("report-desc-input").value.trim();
+    const fileInput = document.getElementById("report-attachment-input");
+
+    const submitReport = async (attachmentName = null, attachmentUrl = null) => {
+      const today = new Date();
+      const date = `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, '0')}-${today.getDate().toString().padStart(2, '0')}`;
+
+      const newReport = {
+        id: "rep-" + Date.now(),
+        title,
+        description,
+        date,
+        attachmentName,
+        attachmentUrl,
+        dateCreated: new Date().toISOString()
+      };
+
+      if (!appState.reports) appState.reports = [];
+      appState.reports.push(newReport);
+
+      try {
+        saveData();
+      } catch (err) {
+        console.warn("Excedió la cuota de localStorage al guardar el informe. Guardando sin adjunto...", err);
+        newReport.attachmentUrl = null;
+        newReport.description += `\n\n[Nota del sistema: El archivo adjunto "${attachmentName}" era muy grande para almacenarse en el navegador]`;
+        try {
+          saveData();
+          alert("El informe se guardó con éxito, pero el archivo adjunto era demasiado grande para el almacenamiento local del navegador.");
+        } catch (err2) {
+          console.error("Fallo al guardar informe sin adjunto", err2);
+        }
+      }
+
+      form.reset();
+      closeModal("modal-report");
+      alert("Informe de Gestión publicado correctamente.");
+
+      if (appState.config.sheetsUrl) {
+        const sheetData = { ...newReport };
+        if (sheetData.attachmentUrl && sheetData.attachmentUrl.length > 40000) {
+          sheetData.attachmentUrl = "[Archivo grande guardado en base de datos local]";
+        }
+        await postToGoogleSheets("addReport", sheetData);
+        syncWithGoogleSheets();
+      } else {
+        updateUI();
+      }
+    };
+
+    if (fileInput && fileInput.files && fileInput.files[0]) {
+      const file = fileInput.files[0];
+      if (file.size > 2 * 1024 * 1024) {
+        alert("El archivo adjunto supera el límite de 2MB. Por favor, selecciona un archivo más pequeño.");
         return;
       }
 
       const reader = new FileReader();
       reader.onload = function(evt) {
-        const dataUrl = evt.target.result;
-        const oldFilename = appState.config.reportFilename;
-        const oldDataUrl = appState.config.reportDataUrl;
-        
-        appState.config.reportFilename = file.name;
-        
-        // Si el archivo es grande (>1.5MB), guardamos solo la referencia por nombre del archivo local
-        // para evitar exceder la cuota de localStorage.
-        if (file.size > 1.5 * 1024 * 1024) {
-          appState.config.reportDataUrl = null;
-          try {
-            saveData();
-            alert(`El informe se actualizó como archivo local de referencia: "${file.name}".\n\nDebido al tamaño del archivo (${(file.size / 1024 / 1024).toFixed(2)} MB), no se almacena en la memoria del navegador. Asegúrate de colocar el archivo "${file.name}" en la misma carpeta que este portal web y cargar la página nuevamente.`);
-          } catch (err) {
-            console.error("Error al guardar estado de archivo grande:", err);
-          }
-        } else {
-          // Archivo pequeño: intentamos guardar en localStorage
-          appState.config.reportDataUrl = dataUrl;
-          try {
-            saveData();
-            alert(`Informe de Gestión "${file.name}" cargado y guardado en la memoria del navegador con éxito.`);
-          } catch (err) {
-            console.warn("Excedió la cuota de localStorage. Guardando como referencia local...", err);
-            appState.config.reportDataUrl = null;
-            try {
-              saveData();
-              alert(`El archivo es muy grande para la memoria rápida del navegador. Se guardó la referencia local: "${file.name}". Asegúrate de copiarlo en la misma carpeta de la aplicación.`);
-            } catch (err2) {
-              // Si todo falla, restaurar original
-              appState.config.reportFilename = oldFilename;
-              appState.config.reportDataUrl = oldDataUrl;
-              alert("No se pudo guardar la configuración del informe debido a un error de almacenamiento.");
-            }
-          }
-        }
-        
-        // Limpiar input
-        fileInput.value = "";
-        
-        // Actualizar UI para reflejar el cambio en el iframe y etiquetas
-        updateUI();
+        submitReport(file.name, evt.target.result);
       };
-      
       reader.readAsDataURL(file);
-    });
-  }
-
-  if (resetBtn) {
-    resetBtn.addEventListener("click", () => {
-      if (confirm("¿Deseas restaurar el informe por defecto (informe_raquira_UNICO.html)?")) {
-        appState.config.reportFilename = "informe_raquira_UNICO.html";
-        appState.config.reportDataUrl = null;
-        saveData();
-        updateUI();
-        alert("Se ha restaurado el informe de gestión por defecto.");
-      }
-    });
-  }
+    } else {
+      submitReport();
+    }
+  });
 }
+
+// Eliminar un informe
+window.deleteReport = async function(id) {
+  if (confirm("¿Estás seguro de que deseas eliminar este informe de gestión?")) {
+    appState.reports = appState.reports.filter(r => r.id !== id);
+    saveData();
+
+    if (appState.config.sheetsUrl) {
+      await postToGoogleSheets("deleteReport", { id: id });
+      syncWithGoogleSheets();
+    } else {
+      updateUI();
+    }
+  }
+};
 
 // Función global para sincronizar el menú lateral cuando se navega desde el Bento Grid
 window.setActiveMenuItem = function(targetViewId) {
