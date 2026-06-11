@@ -508,13 +508,13 @@ function renderLogo() {
   const cfgPreview = document.getElementById("cfg-logo-preview");
   
   if (appState.config.logoData && !appState.config.logoData.startsWith("[")) {
-    const imgHtml = `<img src="${appState.config.logoData}" class="logo-img" alt="Logotipo">`;
+    const imgHtml = `<img src="${appState.config.logoData}" class="logo-img" alt="Logotipo" onerror="this.onerror=null; this.src='logo.jpeg';">`;
     container.innerHTML = imgHtml;
     cfgPreview.innerHTML = imgHtml;
   } else {
     // Intentar cargar la imagen local del conjunto por defecto
     const img = document.createElement("img");
-    img.src = "LOGO RAQUIRA.jpeg";
+    img.src = "logo.jpeg";
     img.className = "logo-img";
     img.alt = "Logotipo";
     img.onerror = function() {
