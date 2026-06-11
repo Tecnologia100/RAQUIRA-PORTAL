@@ -237,7 +237,15 @@ async function syncWithGoogleSheets() {
       
       // Mapear configuración de vuelta
       if (result.config && Object.keys(result.config).length > 0) {
+        const sheetsLogo = result.config.logoData;
+        const localLogo = appState.config.logoData;
+        
         appState.config = { ...appState.config, ...result.config };
+        
+        // Evitar que un logo vacío o marcador de Sheets sobrescriba un logo local válido
+        if ((!sheetsLogo || sheetsLogo.length < 100) && localLogo && localLogo.length > 100) {
+          appState.config.logoData = localLogo;
+        }
       }
       
       // Mapear espacios
@@ -499,20 +507,32 @@ function renderLogo() {
   const container = document.getElementById("sidebar-logo-container");
   const cfgPreview = document.getElementById("cfg-logo-preview");
   
-  if (appState.config.logoData) {
+  if (appState.config.logoData && !appState.config.logoData.startsWith("[")) {
     const imgHtml = `<img src="${appState.config.logoData}" class="logo-img" alt="Logotipo">`;
     container.innerHTML = imgHtml;
     cfgPreview.innerHTML = imgHtml;
   } else {
-    // Logo Ráquira predeterminado (SVG)
-    const svgHtml = `
-      <svg class="logo-img" viewBox="0 0 100 100" id="default-logo-svg">
-        <path d="M20,90 C20,90 30,10 55,10 C80,10 80,45 55,45 C45,45 40,55 40,65 L40,90" fill="none" stroke="#1e40af" stroke-width="12" stroke-linecap="round"/>
-        <path d="M40,50 C40,50 60,50 75,65 C85,75 80,90 80,90" fill="none" stroke="#059669" stroke-width="12" stroke-linecap="round"/>
-        <circle cx="55" cy="28" r="8" fill="#f59e0b"/>
-      </svg>`;
-    container.innerHTML = svgHtml;
-    cfgPreview.innerHTML = svgHtml;
+    // Intentar cargar la imagen local del conjunto por defecto
+    const img = document.createElement("img");
+    img.src = "LOGO RAQUIRA.jpeg";
+    img.className = "logo-img";
+    img.alt = "Logotipo";
+    img.onerror = function() {
+      // Si falla, usar el SVG por defecto
+      const svgHtml = `
+        <svg class="logo-img" viewBox="0 0 100 100" id="default-logo-svg">
+          <path d="M20,90 C20,90 30,10 55,10 C80,10 80,45 55,45 C45,45 40,55 40,65 L40,90" fill="none" stroke="#1e40af" stroke-width="12" stroke-linecap="round"/>
+          <path d="M40,50 C40,50 60,50 75,65 C85,75 80,90 80,90" fill="none" stroke="#059669" stroke-width="12" stroke-linecap="round"/>
+          <circle cx="55" cy="28" r="8" fill="#f59e0b"/>
+        </svg>`;
+      container.innerHTML = svgHtml;
+      cfgPreview.innerHTML = svgHtml;
+    };
+    
+    container.innerHTML = "";
+    cfgPreview.innerHTML = "";
+    container.appendChild(img);
+    cfgPreview.appendChild(img.cloneNode(true));
   }
 }
 
@@ -566,7 +586,12 @@ function setupConfigForm() {
 
     // Sincronizar en Sheets
     if (appState.config.sheetsUrl) {
-      await postToGoogleSheets("updateConfig", appState.config);
+      const configToPost = { ...appState.config };
+      // Si el logo es demasiado grande para Sheets (>40KB / ~50,000 chars), evitamos subirlo para no romper la celda
+      if (configToPost.logoData && configToPost.logoData.length > 40000) {
+        configToPost.logoData = "[Logo grande guardado localmente]";
+      }
+      await postToGoogleSheets("updateConfig", configToPost);
       
       // Si la URL cambió, re-sincronizar todo
       if (appState.config.sheetsUrl !== oldSheetsUrl) {
