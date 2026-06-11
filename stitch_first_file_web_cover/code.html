@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Conjunto Ráquira - Portal de Información</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-container": "#131b2e",
+                        "white": "#FFFFFF",
+                        "on-primary": "#ffffff",
+                        "surface-container-low": "#eff4ff",
+                        "surface-dim": "#cbdbf5",
+                        "on-primary-fixed": "#131b2e",
+                        "inverse-surface": "#213145",
+                        "on-primary-container": "#7c839b",
+                        "surface-container": "#e5eeff",
+                        "surface-container-high": "#dce9ff",
+                        "surface-light": "#F8FAFC",
+                        "on-secondary-fixed-variant": "#004395",
+                        "on-background": "#0b1c30",
+                        "on-surface": "#0b1c30",
+                        "on-secondary-container": "#fefcff",
+                        "on-tertiary-container": "#d95f00",
+                        "surface-variant": "#d3e4fe",
+                        "error": "#ba1a1a",
+                        "secondary-container": "#2170e4",
+                        "on-surface-variant": "#45464d",
+                        "vibrant-green": "#22C55E",
+                        "surface-bright": "#f8f9ff",
+                        "on-tertiary-fixed-variant": "#783200",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-on-surface": "#eaf1ff",
+                        "tertiary-fixed-dim": "#ffb690",
+                        "secondary-fixed": "#d8e2ff",
+                        "tertiary-fixed": "#ffdbca",
+                        "secondary-fixed-dim": "#adc6ff",
+                        "background": "#f8f9ff",
+                        "on-tertiary-fixed": "#341100",
+                        "tertiary-container": "#341100",
+                        "primary-fixed-dim": "#bec6e0",
+                        "primary": "#000000",
+                        "tertiary": "#000000",
+                        "on-tertiary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "on-error": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "primary-fixed": "#dae2fd",
+                        "secondary": "#0058be",
+                        "inverse-primary": "#bec6e0",
+                        "surface-tint": "#565e74",
+                        "outline-variant": "#c6c6cd",
+                        "surface-container-highest": "#d3e4fe",
+                        "on-secondary-fixed": "#001a42",
+                        "surface": "#f8f9ff",
+                        "outline": "#76777d",
+                        "on-primary-fixed-variant": "#3f465c"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "container-max": "1280px",
+                        "base": "8px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "40px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "label-md": ["Plus Jakarta Sans"],
+                        "headline-xl": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                        "headline-xl": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        .bento-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .bento-card:active {
+            transform: scale(0.96);
+        }
+        .glass-header {
+            backdrop-filter: blur(8px);
+            background: rgba(255, 255, 255, 0.85);
+        }
+    </style>
+</head>
+<body class="bg-surface-light text-on-background pb-24">
+<!-- TopAppBar -->
+<header class="bg-white dark:bg-primary-container border-b border-outline-variant dark:border-outline shadow-sm flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop h-16 sticky top-0 z-50">
+<div class="flex items-center gap-3">
+<button class="p-2 hover:bg-surface-container-low transition-colors rounded-full active:scale-95 duration-150">
+<span class="material-symbols-outlined text-secondary dark:text-secondary-fixed">menu</span>
+</button>
+<h1 class="font-headline-md text-headline-md font-bold text-secondary dark:text-white">Conjunto Ráquira</h1>
+</div>
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-secondary-container">
+<img alt="Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhCZmYEbu_t_8uMIwR6yMgmar6hGyibqXx10aiKRCfi-PL5ULwfrAn6KWvA_9nJV2Oqu-JffdWwTNWtc5dM9g8IA4Ph6FziqoqDEv5-OGGVOt-Ln8tEraBTX1jaMJs-0gdjELIXW9xVpjrUhRJPFRz1T67I8J9JIaHdcNam1xrqeRanSx1AbUr8CTrvgJRqcUsvOlgjJw1K4WL5esZxuBO-1rKRHLZ8DqYoWcH6B6wFCW3WdBROs0mbg5OMbB50pqgYwsgglNnB04"/>
+</div>
+</header>
+<!-- Main Content -->
+<main class="max-w-md mx-auto">
+<!-- Hero Section -->
+<section class="relative h-64 w-full overflow-hidden">
+<img alt="Hero Cover" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDax8-DP_oeDTdXkIofarL_tlFxKFZfJ6byGImGvEHsW3gO9g7A_sbB8qCzaDo-XF53dKuFCUIeBSF9quI0GDMCvwdyAsKxl2FXt5xcD8gnvDSdnO8D49YOicKpA47PcXb7agJzaubGLXQ1i7hYE_lOla7MO_Avgf2vd-rDMjAWUg8QPKQZ-7OBy5QqjcbRADxvaye-1zJg1lFZxXC9cyrKR5Lu8U946Doei06RmBrcMZX8HSv4THTgGklpklAPaumkTMkVrr-1dac"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6">
+<h2 class="text-white font-headline-lg-mobile text-headline-lg-mobile mb-1">Portal de Información y Servicios</h2>
+<p class="text-surface-variant font-body-md text-body-md">¡Bienvenido a Ráquira!</p>
+</div>
+</section>
+<!-- Welcome & Description -->
+<section class="px-margin-mobile py-6">
+<div class="bg-white rounded-xl p-6 shadow-sm border border-surface-container">
+<div class="flex items-center gap-4 mb-4">
+<div class="w-12 h-12 bg-secondary-container rounded-full flex items-center justify-center text-white">
+<span class="material-symbols-outlined">apartment</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Administración</h3>
+<p class="text-on-surface-variant font-label-md text-label-md">Sandra Liliana Iquinas</p>
+</div>
+</div>
+<p class="text-on-surface-variant font-body-md text-body-md mb-4">
+                    Panel administrativo y de servicios residenciales para copropietarios e inquilinos de la Ciudad Guabinas.
+                </p>
+<div class="grid grid-cols-2 gap-3 pt-4 border-t border-surface-container">
+<div class="text-center">
+<span class="block font-label-sm text-label-sm text-on-primary-container">NIT</span>
+<span class="font-body-md text-body-md font-bold">901.900.228</span>
+</div>
+<div class="text-center border-l border-surface-container">
+<span class="block font-label-sm text-label-sm text-on-primary-container">Ubicación</span>
+<span class="font-body-md text-body-md font-bold">Yumbo</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Quick Access Bento Grid -->
+<section class="px-margin-mobile pb-6">
+<h3 class="font-headline-md text-headline-md mb-4 px-1">Accesos Rápidos</h3>
+<div class="bento-grid">
+<!-- AvalPay -->
+<a class="bento-card col-span-2 bg-secondary-container p-5 rounded-2xl flex flex-col justify-between h-40 shadow-md" href="https://www.avalpaycenter.com/wps/portal/portal-de-pagos/web/pagos-aval/resultado-busqueda/realizar-pago?idConv=00026876&amp;origen=buscar">
+<div class="flex justify-between items-start">
+<div class="bg-white/20 p-2 rounded-lg">
+<span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">payments</span>
+</div>
+<span class="material-symbols-outlined text-white/50">open_in_new</span>
+</div>
+<div>
+<h4 class="text-white font-headline-md text-headline-md">Pagos en Línea</h4>
+<p class="text-white/80 font-label-sm text-label-sm">AvalPay Center</p>
+</div>
+</a>
+<!-- Reservas -->
+<div class="bento-card bg-white p-4 rounded-2xl border border-surface-container shadow-sm flex flex-col gap-3">
+<div class="w-10 h-10 bg-surface-container-low rounded-xl flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">event_available</span>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface">Reservas</h4>
+<p class="text-on-surface-variant text-[10px] uppercase tracking-wider font-bold">Zonas comunes</p>
+</div>
+</div>
+<!-- Mudanzas -->
+<div class="bento-card bg-white p-4 rounded-2xl border border-surface-container shadow-sm flex flex-col gap-3">
+<div class="w-10 h-10 bg-surface-container-low rounded-xl flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">local_shipping</span>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface">Mudanzas</h4>
+<p class="text-on-surface-variant text-[10px] uppercase tracking-wider font-bold">Ingresos/Salidas</p>
+</div>
+</div>
+<!-- PQR -->
+<div class="bento-card bg-surface-container-highest p-4 rounded-2xl border border-surface-container shadow-sm flex flex-col justify-between h-32">
+<div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">support_agent</span>
+</div>
+<h4 class="font-label-md text-label-md text-on-surface">PQRs</h4>
+</div>
+<!-- Docs -->
+<div class="bento-card bg-white p-4 rounded-2xl border border-surface-container shadow-sm flex flex-col justify-between h-32">
+<div class="w-10 h-10 bg-surface-container-low rounded-xl flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">description</span>
+</div>
+<h4 class="font-label-md text-label-md text-on-surface">Documentos</h4>
+</div>
+</div>
+</section>
+<!-- Latest Notices -->
+<section class="px-margin-mobile pb-8">
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-headline-md text-headline-md">Últimos Avisos</h3>
+<button class="text-secondary font-label-md text-label-md flex items-center gap-1">
+                    Ver todos <span class="material-symbols-outlined text-sm">arrow_forward_ios</span>
+</button>
+</div>
+<div class="bg-surface-container-low rounded-2xl p-8 text-center border-2 border-dashed border-surface-dim">
+<span class="material-symbols-outlined text-on-primary-container text-4xl mb-2">campaign</span>
+<p class="text-on-primary-container font-body-md text-body-md">No hay avisos recientes registrados.</p>
+</div>
+</section>
+<!-- Contact Section -->
+<section class="px-margin-mobile pb-12">
+<div class="bg-white rounded-2xl p-6 shadow-sm border border-surface-container">
+<h3 class="font-headline-md text-headline-md mb-6">Datos de Contacto</h3>
+<div class="space-y-4">
+<div class="flex items-start gap-4">
+<div class="p-2 bg-surface-container rounded-lg">
+<span class="material-symbols-outlined text-secondary">call</span>
+</div>
+<div>
+<p class="text-on-surface-variant font-label-sm text-label-sm">Teléfono de Oficina</p>
+<p class="font-headline-md text-headline-md">313 7075008</p>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<div class="p-2 bg-surface-container rounded-lg">
+<span class="material-symbols-outlined text-secondary">mail</span>
+</div>
+<div>
+<p class="text-on-surface-variant font-label-sm text-label-sm">Correo Electrónico</p>
+<p class="font-body-md text-body-md break-all">conjuntoraquira@gmail.com</p>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<div class="p-2 bg-surface-container rounded-lg">
+<span class="material-symbols-outlined text-secondary">location_on</span>
+</div>
+<div>
+<p class="text-on-surface-variant font-label-sm text-label-sm">Ubicación</p>
+<p class="font-body-md text-body-md">Calle 7 # 20B - 63 — Yumbo</p>
+</div>
+</div>
+</div>
+<div class="mt-8 p-4 bg-surface-container-low rounded-xl">
+<h4 class="font-label-md text-label-md mb-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">schedule</span>
+                        Atención al Propietario
+                    </h4>
+<p class="text-on-surface-variant font-label-sm text-label-sm leading-relaxed">
+                        Lunes a Viernes: 8:00 AM - 12:00 PM y 2:00 PM - 5:00 PM.<br/>
+                        Sábados: 9:00 AM - 12:00 PM.
+                    </p>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 bg-white dark:bg-primary-container shadow-[0_-4px_12px_rgba(0,0,0,0.05)] rounded-t-xl">
+<button class="flex flex-col items-center justify-center bg-surface-container-high dark:bg-secondary-container text-secondary dark:text-on-secondary-container rounded-xl p-2 transition-transform scale-95 active:scale-90">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-sm text-label-sm">Inicio</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-primary-container p-2 hover:bg-surface-light dark:hover:bg-inverse-surface transition-transform active:scale-90">
+<span class="material-symbols-outlined">campaign</span>
+<span class="font-label-sm text-label-sm">Avisos</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-primary-container p-2 hover:bg-surface-light dark:hover:bg-inverse-surface transition-transform active:scale-90">
+<span class="material-symbols-outlined">event_available</span>
+<span class="font-label-sm text-label-sm">Reservas</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-primary-container p-2 hover:bg-surface-light dark:hover:bg-inverse-surface transition-transform active:scale-90">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-label-sm text-label-sm">Pagos</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-primary-container p-2 hover:bg-surface-light dark:hover:bg-inverse-surface transition-transform active:scale-90">
+<span class="material-symbols-outlined">more_horiz</span>
+<span class="font-label-sm text-label-sm">Más</span>
+</button>
+</nav>
+<script>
+        // Micro-interaction for scroll effects
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 20) {
+                header.classList.add('glass-header');
+            } else {
+                header.classList.remove('glass-header');
+            }
+        });
+    </script>
+</body></html>
