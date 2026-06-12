@@ -505,8 +505,10 @@ function renderLogo() {
   const container = document.getElementById("sidebar-logo-container");
   const cfgPreview = document.getElementById("cfg-logo-preview");
   
-  // Siempre usar la imagen estática definitiva con anti-caché
-  const imgHtml = `<img src="logo.jpeg?v=${new Date().getTime()}" class="logo-img" alt="Logo Conjunto Residencial Ráquira">`;
+  // Usar anti-caché solo si no estamos abriendo el archivo localmente (protocolo file:// no lo soporta)
+  const isLocalFile = window.location.protocol === 'file:';
+  const cacheSuffix = isLocalFile ? '' : `?v=${new Date().getTime()}`;
+  const imgHtml = `<img src="logo.jpeg${cacheSuffix}" class="logo-img" alt="Logo Conjunto Residencial Ráquira">`;
   container.innerHTML = imgHtml;
   if (cfgPreview) cfgPreview.innerHTML = imgHtml;
 }
