@@ -428,8 +428,7 @@ function navigateToTab(tabId) {
   
   // Disparadores específicos por vista
   if (tabId === "view-reservas") {
-    renderSpacesSelector();
-    renderCalendar();
+    // La vista de reservas ahora es un iframe de Google Form, no requiere renderizado JS.
   }
 }
 
