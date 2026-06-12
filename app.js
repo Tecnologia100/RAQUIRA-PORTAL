@@ -153,9 +153,6 @@ document.addEventListener("DOMContentLoaded", () => {
   setupNavigation();
   setupSidebarToggle();
   setupConfigForm();
-  setupSpacesAdmin();
-  setupCalendarNav();
-  setupReservationForm();
   setupNoticeForm();
   setupRequestForms();
   setupPqrForms();
