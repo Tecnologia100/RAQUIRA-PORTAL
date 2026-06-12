@@ -1485,7 +1485,7 @@ function setupAdminLogin() {
     const pinEntered = document.getElementById("admin-pin-input").value;
     const correctPin = appState.config.adminPin || "1234";
     
-    if (pinEntered === correctPin || pinEntered === "1234") {
+    if (pinEntered === correctPin) {
       // Login exitoso
       isAdmin = true;
       document.body.classList.add("admin-mode-active");
