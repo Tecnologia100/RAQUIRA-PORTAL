@@ -237,9 +237,13 @@ async function syncWithGoogleSheets() {
       
       // Mapear configuración de vuelta
       if (result.config && Object.keys(result.config).length > 0) {
+        const localLogo = appState.config.logoData; // preserve local logo
         appState.config = { ...appState.config, ...result.config };
-        // El logo se maneja como archivo estático (logo.jpeg), no desde Sheets
-        delete appState.config.logoData;
+        if (localLogo) {
+          appState.config.logoData = localLogo; // restore local logo
+        } else {
+          delete appState.config.logoData;
+        }
       }
       
       // Mapear espacios
@@ -501,7 +505,8 @@ function renderLogo() {
   const container = document.getElementById("sidebar-logo-container");
   const cfgPreview = document.getElementById("cfg-logo-preview");
   
-  const imgHtml = `<img src="logo.jpeg" class="logo-img" alt="Logo Conjunto Residencial Ráquira">`;
+  // Siempre usar la imagen estática definitiva con anti-caché
+  const imgHtml = `<img src="logo.jpeg?v=${new Date().getTime()}" class="logo-img" alt="Logo Conjunto Residencial Ráquira">`;
   container.innerHTML = imgHtml;
   if (cfgPreview) cfgPreview.innerHTML = imgHtml;
 }
@@ -511,28 +516,6 @@ function renderLogo() {
 // ==========================================
 function setupConfigForm() {
   const form = document.getElementById("config-form");
-  const fileInput = document.getElementById("cfg-logo-file");
-  const resetLogoBtn = document.getElementById("btn-reset-logo");
-
-  // Procesar archivo de imagen
-  fileInput.addEventListener("change", (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = function(evt) {
-        appState.config.logoData = evt.target.result;
-        renderLogo();
-      };
-      reader.readAsDataURL(file);
-    }
-  });
-
-  // Reset logo
-  resetLogoBtn.addEventListener("click", () => {
-    appState.config.logoData = null;
-    renderLogo();
-    fileInput.value = "";
-  });
 
   // Guardar configuración
   form.addEventListener("submit", async (e) => {
